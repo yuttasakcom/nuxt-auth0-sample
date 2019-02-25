@@ -1,0 +1,21 @@
+{
+  "name": "auth0-sample",
+  "version": "1.0.0",
+  "description": "My rad Nuxt.js project",
+  "author": "Yuttasak Pannawat",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "auth0-js": "^9.10.0",
+    "eventemitter3": "^3.1.0",
+    "nuxt": "^1.0.0"
+  },
+  "devDependencies": {
+    "cross-env": "^5.0.1"
+  }
+}
