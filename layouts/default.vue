@@ -1,8 +1,8 @@
 <template>
   <div>
-    <Header />
+    <Header/>
     <div class="container">
-      <nuxt />
+      <nuxt/>
     </div>
   </div>
 </template>
@@ -12,6 +12,7 @@ const Header = () => import("@/components/header/Header");
 export default {
   components: {
     Header
-  }
+  },
+  middleware: ["check-auth"]
 };
 </script>
