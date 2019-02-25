@@ -16,13 +16,12 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import auth0 from "@/services/AuthService";
 
 export default {
   computed: {
-    isAuthenticated() {
-      return this.$store.state["auth"].isAuthenticated;
-    }
+    ...mapState("auth", ["isAuthenticated"])
   },
   methods: {
     login() {
