@@ -12,15 +12,20 @@ class Auth0 {
 
     this.login = this.login.bind(this);
     this.handleAuthentication = this.handleAuthentication.bind(this);
+    this.setSession = this.setSession.bind(this);
   }
 
   handleAuthentication() {
-    this.auth0.parseHash((err, authResult) => {
-      if (authResult && authResult.accessToken && authResult.idToken) {
-        this.setSession(authResult);
-      } else if (err) {
-        console.log(err);
-      }
+    return new Promise((resolve, reject) => {
+      this.auth0.parseHash((err, authResult) => {
+        if (authResult && authResult.accessToken && authResult.idToken) {
+          this.setSession(authResult);
+          resolve();
+        } else if (err) {
+          console.log(err);
+          reject();
+        }
+      });
     });
   }
 
