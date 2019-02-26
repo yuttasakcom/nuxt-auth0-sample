@@ -8,7 +8,7 @@ class Auth0 {
       clientID: 'XY6c15eEBcMPS6sa2oKd5yoUpEMNOH8d',
       redirectUri: 'http://localhost:3000/callback',
       responseType: 'token id_token',
-      scope: 'openid',
+      scope: 'openid'
     })
 
     this.login = this.login.bind(this)
@@ -51,7 +51,7 @@ class Auth0 {
     Cookies.remove('expiresAt')
     this.auth0.logout({
       returnTo: '',
-      clientID: 'XY6c15eEBcMPS6sa2oKd5yoUpEMNOH8d',
+      clientID: 'XY6c15eEBcMPS6sa2oKd5yoUpEMNOH8d'
     })
   }
 
@@ -78,6 +78,8 @@ class Auth0 {
 
       return new Date().getTime() < expiresAt
     }
+
+    return false
   }
 }
 
