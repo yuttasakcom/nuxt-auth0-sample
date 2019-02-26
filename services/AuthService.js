@@ -1,5 +1,6 @@
 import auth0 from 'auth0-js'
 import Cookies from 'js-cookie'
+import jwt from 'jsonwebtoken'
 
 class Auth0 {
   constructor() {
@@ -15,8 +16,12 @@ class Auth0 {
     this.handleAuthentication = this.handleAuthentication.bind(this)
     this.setSession = this.setSession.bind(this)
     this.logout = this.logout.bind(this)
-    this.isAuthenticated = this.isAuthenticated.bind(this)
     this.clientAuth = this.clientAuth.bind(this)
+    this.serverAuth = this.serverAuth.bind(this)
+    this.verifyToken = this.verifyToken.bind(this)
+    this.serverGetToken = this.serverGetToken.bind(this)
+    this.clientUser = this.clientUser.bind(this)
+    this.serverUser = this.serverUser.bind(this)
   }
 
   handleAuthentication() {
@@ -55,31 +60,61 @@ class Auth0 {
     })
   }
 
-  isAuthenticated() {
-    const expiresAt = Cookies.getJSON('expiresAt')
-    return new Date().getTime() < expiresAt
-  }
-
   clientAuth() {
-    return this.isAuthenticated()
+    const token = Cookies.getJSON('jwt')
+    const verifiedToken = this.verifyToken(token)
+
+    return verifiedToken
   }
 
-  serverAuth(req) {
+  serverGetToken(req) {
     if (req.headers.cookie) {
-      const expiresAtCookie = req.headers.cookie
+      const tokenCookie = req.headers.cookie
         .split(';')
-        .find(c => c.trim().startsWith('expiresAt='))
+        .find(c => c.trim().startsWith('jwt='))
 
-      if (!expiresAtCookie) {
+      if (!tokenCookie) {
         return false
       }
 
-      const expiresAt = expiresAtCookie.split('=')[1]
+      const token = tokenCookie.split('=')[1]
 
-      return new Date().getTime() < expiresAt
+      return token
     }
 
     return false
+  }
+
+  serverAuth(req) {
+    if (req) {
+      const token = this.serverGetToken(req)
+      const verifiedToken = this.verifyToken(token)
+      return verifiedToken
+    }
+
+    return false
+  }
+
+  verifyToken(token) {
+    if (token) {
+      const decodedToken = jwt.decode(token)
+      const expiresAt = decodedToken.exp * 1000
+      return decodedToken && new Date().getTime() < expiresAt ? true : false
+    }
+
+    return false
+  }
+
+  clientUser() {
+    const token = Cookies.getJSON('jwt')
+    const decodedToken = jwt.decode(token)
+    return decodedToken
+  }
+
+  serverUser(req) {
+    const token = this.serverGetToken(req)
+    const decodedToken = jwt.decode(token)
+    return decodedToken
   }
 }
 

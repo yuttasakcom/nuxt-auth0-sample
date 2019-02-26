@@ -35,7 +35,7 @@ import auth0 from "@/services/AuthService";
 
 export default {
   computed: {
-    ...mapState("auth", ["isAuthenticated"])
+    ...mapState("users", ["isAuthenticated"])
   },
   methods: {
     login() {
